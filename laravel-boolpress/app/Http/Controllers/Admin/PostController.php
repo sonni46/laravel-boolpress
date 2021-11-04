@@ -47,8 +47,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+
+    public function show($slug) /** => scrivere lo slug fa ritornare il nome nel url invece che id */
     {
+        // apre una pagina del sigolo dato 
         $post = Post::where('slug', $slug)->first();
         if(!$post){
             abort(404);
