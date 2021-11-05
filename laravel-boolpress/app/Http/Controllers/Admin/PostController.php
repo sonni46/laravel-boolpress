@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -27,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -38,7 +39,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // prende i dati da crate attraverso il form 
+        $form_data = $request->all();
+        // con il Post ritorniamo con l'array fillable
+        $new_post = new Post(); /** Post è il model che si collega al database */
+        // prendiamo fillable con il metodo fill e lo assegniamo a $form_data
+        $new_post->fill($form_data);
+        // separiamo il titolo con trattini 
+        $slug = Str::slug($new_post->title, '-');
+        // prendiamo lo slug presente nel database
+        $slug_presente = Post::where('slug', $slug)->first();
+        
+        $contatore = 1;
+        while($slug_presente){
+            $slug = $slug . '-' . $contatore;
+            $slug_presente = Post::where('slug', $slug)->first();
+            $contatore++;
+        }
+
+        $new_post->slug = $slug;
+        $new_post->save();
+        return redirect()->route('admin.posts.index')->with('inserted', 'Il record è stato correttamente salvato');
     }
 
     /**
@@ -63,9 +84,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        if(!$post){
+            abort(404);
+        }
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -75,9 +99,34 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        // salviamo in una var tutte le modifiche
+        $form_data = $request->all();
+				
+		// Creiamo lo slug prendendo il titolo
+        if($form_data['title'] != $post->title){
+            $slug = Str::slug($form_data['title'], '-');
+						
+			// Se lo slug è già esistente, aggiungiamo un contatore per
+			// renderlo unico
+            $slug_presente = Post::where('slug', $slug)->first();
+            $contatore = 1;
+            while($slug_presente){
+                $slug = $slug . '-' . $contatore;
+                $slug_presente = Post::where('slug', $slug)->first();
+                $contatore++;
+            }
+						
+			// salviamo il nuovo slug
+            $form_data['slug'] = $slug;
+        }
+				
+		// Salviamo il post con tutte le modifiche
+        $post->update($form_data);
+
+        // Dopo la modifica rimandiamo all'index dei posts
+        return redirect()->route('admin.posts.index')->with('updated', 'Post correttamente aggiornato');
     }
 
     /**
@@ -86,8 +135,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('admin.posts.index')->with('deleted', 'Post eliminato');
     }
 }
