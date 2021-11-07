@@ -39,13 +39,19 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // validare lo store 
+        $request->validate([
+            'title'=>'required|max:50',
+            'content'=> 'required',
+        ]);
+
         // prende i dati da crate attraverso il form 
         $form_data = $request->all();
         // con il Post ritorniamo con l'array fillable
         $new_post = new Post(); /** Post è il model che si collega al database */
         // prendiamo fillable con il metodo fill e lo assegniamo a $form_data
         $new_post->fill($form_data);
-        // separiamo il titolo con trattini 
+        // il titolo diventera il nostro slug
         $slug = Str::slug($new_post->title, '-');
         // prendiamo lo slug presente nel database
         $slug_presente = Post::where('slug', $slug)->first();
@@ -59,7 +65,7 @@ class PostController extends Controller
 
         $new_post->slug = $slug;
         $new_post->save();
-        return redirect()->route('admin.posts.index')->with('inserted', 'Il record è stato correttamente salvato');
+        return redirect()->route('admin.posts.index')->with('inserted', 'Il post è stato correttamente salvato');
     }
 
     /**
@@ -101,6 +107,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $request->validate([
+            'title'=>'required|max:50',
+            'content'=> 'required',
+        ]);
         // salviamo in una var tutte le modifiche
         $form_data = $request->all();
 				

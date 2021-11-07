@@ -12,17 +12,20 @@
 
                         <div class="form-group">
                             <label for="title">Titolo</label>
-                            <input type="text" name="title" id="title" class="form-control">
+                            <input value="{{old('title')}}" type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror">
+                            @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="content">Content</label>
-                            <textarea type="text" name="content" id="content" class="form-control"></textarea>
+                            <textarea type="text" name="content" id="content" class="form-control @error('content') is-invalid @enderror">{{old('content')}}</textarea>
+                            @error('content')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-group">
-                            <label for="Slug">Slug</label>
-                            <textarea type="text" name="Slug" id="Slug" class="form-control"></textarea>
-                        </div>
+                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-success">Crea post</button>
                         </div>

@@ -12,16 +12,18 @@
 
                     <div class="form-group">
                         <label for="title">Titolo</label>
-                        <input value="{{$post->title}}" type="text" name="title" id="title" class="form-control">
+                        <input value="{!! old('title') , $post->title !!}" type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror">
+                        @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="content">Titolo</label>
-                        <textarea type="text" name="content" id="content" class="form-control">{{$post->content}}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="Slug">Slug</label>
-                        <input value="{{$post->slug}}" type="text" name="Slug" id="Slug" class="form-control">
+                        <label for="content">Content</label>
+                        <textarea type="text" name="content" id="content" class="form-control @error('content') is-invalid @enderror">{!! old('content') , $post->content !!}</textarea>
+                        @error('content')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
