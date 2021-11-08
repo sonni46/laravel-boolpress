@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Str;
+use App\Category;
 
 class PostController extends Controller
 {
@@ -28,7 +29,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -43,6 +45,7 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required|max:50',
             'content'=> 'required',
+            'category_id'=>'exists:categories,id'
         ]);
 
         // prende i dati da crate attraverso il form 
@@ -95,7 +98,10 @@ class PostController extends Controller
         if(!$post){
             abort(404);
         }
-        return view('admin.posts.edit', compact('post'));
+
+        $categories = Category::all();
+
+        return view('admin.posts.edit', compact('post',"categories"));
     }
 
     /**
