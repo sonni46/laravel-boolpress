@@ -31,6 +31,7 @@
               <th scope="col">Title</th>
               <th scope="col">descriptions</th>
               <th scope="col">slug</th>
+              <th scope="col">category</th>
             </tr>
           </thead>
           <tbody>
@@ -39,6 +40,11 @@
                   <td>{{$post->title}}</td>
                   <td>{{$post->content}}</td>
                   <td>{{$post->slug}}</td>
+                  <td>
+                    @if ($post->category)
+                    {{$post->category->name}}
+                    @endif
+                  </td>
                   <td class="d-flex">
                       {{-- bottone dettaglio  --}}
                       <a class="btn btn-info" href="{{ route('admin.posts.show', $post->slug) }}" >Details</a>

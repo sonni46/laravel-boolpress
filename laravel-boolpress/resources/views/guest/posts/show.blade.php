@@ -15,7 +15,6 @@
                     </p>
                 </section>
             </article>
-            
         </div>
     </div>
 </div>
