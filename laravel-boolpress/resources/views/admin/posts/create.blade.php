@@ -36,10 +36,33 @@
                                     {{ $category->name }}
                                 </option>
                               @endforeach
-                              @error('category_id')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                              @enderror
                             </select>
+
+                            @error('category_id')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <p>Seleziona i tag</p>
+                            @foreach ($tags as $tag)
+
+                                @if ($errors->any())
+                                    
+                                    <input  
+                                    {{ in_array($tag->id, old('tags',[])) ? 'checked' : null }}
+                                    value="{{ $tag->id }}" id="{{'tag' . $tag->id }}" type="checkbox" name="tags[]" class="form check-input">
+                                    <label for="{{'tag' . $tag->id }}" class="form-check-label" for=""> {{ $tag->name}}</label>
+                                
+                                @else
+                                    <input 
+                                    {{ $post->tags->contains->($tag) ? 'checked' : null }}
+                                    value="{{ $tag->id }}" id="{{'tag' . $tag->id }}" type="checkbox" name="tags[]" class="form check-input">
+                                    <label for="{{'tag' . $tag->id }}" class="form-check-label" for=""> {{ $tag->name}}</label>
+                                
+                                @endif
+
+                            @endforeach
                         </div>
                         
                         <div class="form-group">
