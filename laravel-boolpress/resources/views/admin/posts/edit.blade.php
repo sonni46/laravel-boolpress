@@ -49,19 +49,18 @@
                         <div class="form-check form-check-inline">
 
                             @if ($errors->any())
-                            
-                                <input  
-                                {{ in_array($tag->id, old('tags',[])) ? 'checked' : null }}
-                                value="{{ $tag->id }}" id="{{'tag' . $tag->id }}" type="checkbox" name="tags[]" class="form check-input">
-                                <label for="{{'tag' . $tag->id }}" class="form-check-label" for=""> {{ $tag->name}}</label>
-                            
+                                    
+                                    <input  
+                                    {{ in_array($tag->id, old('tags',[])) ? 'checked' : null }}
+                                    value="{{ $tag->id }}" id="{{'tag' . $tag->id }}" type="checkbox" name="tags[]" class="form check-input">
+                                    <label for="{{'tag' . $tag->id }}" class="form-check-label" for=""> {{ $tag->name}}</label>
+                                
                             @else
-
-                                <input 
-                                {{ $post->tags->contains($tag->id) ? 'checked' : null }} 
-                                value="{{ $tag->id }}" id="{{'tag' . $tag->id }}" type="checkbox" name="tags[]" class="form check-input">
-                                <label for="{{'tag' . $tag->id }}" class="form-check-label" for="{{'tag' . $tag->id }}"> {{ $tag->name}}</label>
-                            
+                                    <input 
+                                    {{ $post->tags->contains($tag->id) ? 'checked' : null }} 
+                                    value="{{ $tag->id }}" id="{{'tag' . $tag->id }}" type="checkbox" name="tags[]" class="form check-input">
+                                    <label for="{{'tag' . $tag->id }}" class="form-check-label" for="{{'tag' . $tag->id }}"> {{ $tag->name}}</label>
+                                
                             @endif
                         </div>
                         

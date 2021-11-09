@@ -150,10 +150,10 @@ class PostController extends Controller
         $post->update($form_data);
 
         if(array_key_exists('tags',$form_data)) {
-            $post->tags->sync($form_data['tags']);
+            $post->tags()->sync($form_data['tags']);
         }
         else {
-            $post->tags->sync([]);
+            $post->tags()->sync([]);
         }
 
 
