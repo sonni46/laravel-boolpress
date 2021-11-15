@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
 
@@ -14,9 +15,12 @@ class PostController extends Controller
      */
     public function index()
     {
+
         $posts = Post::all();
-        // Per la vista degli utenti
-        return view('guest.posts.index', compact('posts'));
+        return response()->json([
+            'succes' => true,
+            'results' => $posts,
+        ]);
     }
 
     /**
@@ -46,12 +50,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show($id)
     {
-        $post = Post::where('slug', $slug)->first();
-        if(!$post){
-            abort(404);
-        }return view('guest.posts.show', compact('post'));
+        //
     }
 
     /**
@@ -87,10 +88,4 @@ class PostController extends Controller
     {
         //
     }
-
-    public function listPostApi() 
-    {
-        return view('api.index');
-    }
-
 }

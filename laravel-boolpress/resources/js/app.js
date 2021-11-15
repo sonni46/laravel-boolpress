@@ -1,12 +1,8 @@
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
+
 require('./bootstrap');
 
-// usando la query prendiamo tutte le classi in html con i nome delete-post
-const deleteForm = document.querySelectorAll('.deleteForm');
-deleteForm.forEach(item => {
-    item.addEventListener('submit', function(e){
-        const resp = confirm('Vuoi cancellare?');
-        if(!resp){
-            e.preventDefault();
-        }
-    })
-})
