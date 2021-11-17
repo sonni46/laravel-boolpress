@@ -8,6 +8,7 @@ use App\Post;
 use Illuminate\Support\Str;
 use App\Category;
 use App\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -48,11 +49,23 @@ class PostController extends Controller
             'title'=>'required|max:50',
             'content'=> 'required',
             'category_id'=>'exists:categories,id',
-            'tags' => 'exists:tags,id'
+            'tags' => 'exists:tags,id',
+            // 'image' => 'nullable|image'
         ]);
 
         // prende i dati da crate attraverso il form 
         $form_data = $request->all();
+
+        // verifico se è stata caricata l'imagine 
+        if(array_key_exists('image',$form_data)) {
+            // salviamo l'imagine e recuperiamo il path
+            $cover_path = Storage::put('post_covers',$form_data['image']);
+
+            // aggiungiamo all'array  che viene usato nella funzione fill
+            // la chiave cover che contiene il percorso relativo dell'imagine caricata a partire dal public storage 
+            $form_data['cover'] = $cover_path;
+
+        }
         // con il Post ritorniamo con l'array fillable
         $new_post = new Post(); /** Post è il model che si collega al database */
         // prendiamo fillable con il metodo fill e lo assegniamo a $form_data
@@ -72,7 +85,12 @@ class PostController extends Controller
         $new_post->slug = $slug;
         $new_post->save();
 
-        $new_post->tags()->attach($form_data['tags']);
+        if(array_key_exists('tags',$form_data)) {
+            $new_post->tags()->sync($form_data['tags']);
+        }
+        else {
+            $new_post->tags()->sync([]);
+        }
         return redirect()->route('admin.posts.index')->with('inserted', 'Il post è stato correttamente salvato');
     }
 
@@ -123,10 +141,22 @@ class PostController extends Controller
             'title'=>'required|max:50',
             'content'=> 'required',
             'category_id'=>'nullable|exists:categories,id',
-            'tags' => 'exists:tags,id'
+            'tags' => 'exists:tags,id',
+            'image' => 'nullable|image'
         ]);
         // salviamo in una var tutte le modifiche
         $form_data = $request->all();
+
+
+        // vediamo se l'immagine esiste 
+        if(array_key_exists('image',$form_data)) {
+            Storage::delete($post->cover);
+            $cover_path = Storage::put('post_covers',$form_data['image']);
+
+            // aggiungiamo all'array  che viene usato nella funzione fill
+            // la chiave cover che contiene il percorso relativo dell'imagine caricata a partire dal public storage 
+            $form_data['cover'] = $cover_path;
+        }
 				
 		// Creiamo lo slug prendendo il titolo
         if($form_data['title'] != $post->title){

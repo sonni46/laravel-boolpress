@@ -87,10 +87,4 @@ class PostController extends Controller
     {
         //
     }
-
-    public function listPostApi() 
-    {
-        return view('api.index');
-    }
-
 }

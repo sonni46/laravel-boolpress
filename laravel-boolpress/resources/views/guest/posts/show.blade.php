@@ -1,5 +1,7 @@
 @extends('layouts.app')
+
 @section('content')
+
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -13,6 +15,9 @@
                     <p class="fs-5">
                         {{ $post->content }}
                     </p>
+                    @if($post->cover)
+                        <img src=" {{ assets('storage/' . $post->cover)}}" alt="{{$post->title}}">
+                    @endif
                 </section>
             </article>
         </div>

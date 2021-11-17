@@ -7,7 +7,7 @@
             <article>
                 <h1>Modifica Post</h1>
 
-                <form action="{{route('admin.posts.update', $post->id)}}" method="post">
+                <form action="{{route('admin.posts.update', $post->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -24,6 +24,20 @@
                         <textarea type="text" name="content" id="content" class="form-control @error('content') is-invalid @enderror">{!! old('content') , $post->content !!}</textarea>
                         @error('content')
                         <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="from-grup">
+                        @if ($post->cover)
+                            <p>immagine di copertina selezionata </p>
+                            <img src=" {{ asset('storage/' . $post->cover)}}" alt="{{$post->title}}">
+                        @else
+                            <p>immagine non trovata</p>
+                        @endif
+                        <label class="d-block" for="image">immagine di copertina</label>
+                        <input type="file" id="image" name="image" class="form-control @error('image') is-invalid @enderror">
+                        @error('image')
+                            <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
 

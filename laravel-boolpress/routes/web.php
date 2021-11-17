@@ -13,33 +13,21 @@ use \Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// rotta che porta alla home principale di laravel 
+
 Route::get('/', 'HomeController@index')->name('home');
 
-// rotta che gestira i posti per l'utente generico 
-Route::resource('/posts', 'PostController');
-Route::get('/vue-post','PostController@listPostApi')->name('list-post-api');
+Route::get('/contact', 'HomeController@contact')->name('contact');
+Route::post('contact', 'HomeController@hendleContactForm')->name('contact.send');
+Route::get('/thank-you', 'HomeController@thankYou')->name('contact.thank-you');
 
-
-
-// serie di rotte che gestisce il meccanismo di autentuicazione
 Auth::routes();
 
-
-// serie di rotte che gesticono i posts admin 
 Route::middleware('auth')->namespace('Admin')->prefix('admin')->name('admin.')
-->group(function(){       //namespace prende la cartella // il prefix prende la cartella e la rinomina                             
-   
+->group(function(){
+    //pagina di atterraggio dopo il login (con il prefix, l'url è /admin)
     Route::get('/', 'HomeController@index')->name('index');
    
     Route::resource('/posts', 'PostController');
-
-   
-   
-    // Rotta per la pagina profilo 
-    Route::get('profile','HomeController@profile')->name('profile');
-    Route::post('generate-token','HomeController@generateToken')->name('generate-token');
 });
 
-
-
+Route::resource('/posts', 'PostController');

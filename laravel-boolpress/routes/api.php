@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// altro metodo per vedere l'e api 
-// Route::resource('/posts', 'Api\PostController');
-
-// controlle con token 
-Route::post('/posts', 'Api\PostController@index')->middleware('api_token_check');
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
